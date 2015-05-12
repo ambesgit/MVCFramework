@@ -1,0 +1,127 @@
+;(function(){this.frontEnd= new function(){return function(){
+
+	var that=this;
+
+	this.$mvc={
+
+
+		$views:{},$models:{},$controllers:{},$events:{},
+	$wiw:window,
+	//this function will get the value of the child node element's attribute
+	getElements:function(node,name){
+		var node=node;
+		var id=id;				
+		if(node.hasChildNodes()){
+			var getElement=function(n){ 				
+				if(n<0){
+					return null;
+				}
+				else if(node.children[n].attributes[0].name===name){
+				//if every one with that value has to be visited, the return word will be cancel					
+					return node.children[n].attributes[0].value;					
+				}
+				return arguments.callee(n-1);
+			}(node.children.length-1);
+			return getElement;		
+		}
+		
+	
+	else {
+		return node;
+	}
+
+	},
+
+	//this function will get the value of a given attrinute of a node
+	getAttributes:function(element,name){
+		var element=element;
+		var name=name;				
+		if(element.hasAttributes()){
+			var getattribute=function(n){ 				
+				if(n<0){
+					return null;
+				}
+				else if(element.attributes[n].name===name){ 
+					return element.attributes[n].value;
+				}
+				return arguments.callee(n-1);
+			}(element.attributes.length-1);
+			return getattribute;		
+		}
+		
+	
+	else {
+		return null;
+	}
+	},
+	events:function(event,data){$eventss[event]=$mvc[data];},
+
+	//this is the view that will be loaded whenever the view function is called
+	view:function(name,url){		
+		//ajax request for a particular view also event object will update
+		try{
+		if(that.$mvc.$views[name]!=undefined){
+			document.getElementById("ie").innerHTML=that.$mvc.$views.ele;
+		}
+
+
+		else{
+
+		var xhr=new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState===4 && xhr.status===200){
+
+				document.getElementById("ie").innerHTML=xhr.responseText;
+				that.$mvc.$views[name]=xhr.responseText;//url;				
+			}
+		}
+		xhr.open("get",url);
+		xhr.send(null);
+
+		}
+	}
+	catch(e){
+		console.log("check your inputs")
+	}
+
+	},
+
+	//this will hold the model of different views loaded sofar
+	model:function(name,url){
+
+		var xhr=new XMLHttpRequest();
+			xhr.onreadystatechange=function(){
+			if(xhr.readyState===4 && (xhr.status>=200 && xhr.status<=304)){
+				//var json=JSON.parse(xhr.responseText);
+				that.$mvc.$models[name]=xhr.responseText;
+
+			}
+		}
+		xhr.open("get",url);
+		xhr.send(null);
+		//if data is not loaded, ajax request will be made also event object will update
+		
+},
+	//business logic will be registered using this function also event object will update
+	controller:function(name,url){
+			var xhr=new XMLHttpRequest();
+			xhr.onreadystatechange=function(){
+			if(xhr.readyState===4 && (xhr.status>=200 && xhr.status<=304)){				
+
+				that.$mvc.$controllers[name]= xhr.responseText;			
+		}
+		}
+		xhr.open("get",url);
+		xhr.send(null);
+		
+		}
+
+
+		};
+			//this will return  
+			return this.$mvc;};}()();
+
+
+
+			return frontEnd;}());
+			
